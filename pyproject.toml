@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "icon-generator"
+version = "0.1.0"
+description = ""
+authors = ["Hundredvisionsguy <winikkc@hsd.k12.or.us>"]
+readme = "README.md"
+packages = [{include = "icon_generator"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+requests = "^2.31.0"
+pyqt6 = "^6.6.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
