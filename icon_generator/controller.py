@@ -8,6 +8,9 @@ import requests as re
 
 url = "https://api.dicebear.com/7.x/pixel-art/svg"
 
-response = re.post(url)
+response = re.get(url)
 
-print(response.text)
+if response.ok:
+    print(response.text)
+else:
+    print(f"There was an error: {response.status_code}")
