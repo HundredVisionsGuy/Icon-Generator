@@ -6,9 +6,12 @@ Python code to make API connections.
 
 import requests as re
 
-url = "https://api.dicebear.com/7.x/pixel-art/svg"
+url = "https://api.dicebear.com/7.x/"
+style = "pixel-art"
+seed = "/svg?seed=HundredVisionsGuy"
 
-response = re.get(url)
+url = url + style + seed
+response = re.post(url)
 
 if response.ok:
     print(response.text)
