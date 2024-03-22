@@ -1,5 +1,6 @@
 import sys
 import controller
+from PyQt6.QtGui import QPalette, QColor
 from PyQt6.QtSvgWidgets import QSvgWidget
 from PyQt6.QtWidgets import (
     QApplication,
@@ -14,8 +15,9 @@ from PyQt6.QtWidgets import (
 
 # Subclass QMainWindow to customize your application's main window
 class MainWindow(QMainWindow):
+
     def __init__(self):
-        super().__init__()
+        super(MainWindow, self).__init__()
 
         self.setWindowTitle("Widgets App")
         self.setContentsMargins(24, 24, 24, 24)  # NEW - adds margin
@@ -47,10 +49,17 @@ class MainWindow(QMainWindow):
 
         widget = QWidget()
         widget.setLayout(layout)
-
-        # Set the central widget of the Window. Widget will expand
-        # to take up all the space in the window by default.
         self.setCentralWidget(widget)
+
+
+class Color(QWidget):
+    def __init__(self, color):
+        super(Color, self).__init__()
+        self.setAutoFillBackground(True)
+
+        palette = self.palette()
+        palette.setColor(QPalette.ColorRole.Window, QColor(color))
+        self.setPalette(palette)
 
 
 app = QApplication(sys.argv)
