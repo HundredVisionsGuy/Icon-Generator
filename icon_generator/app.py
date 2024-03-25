@@ -115,6 +115,11 @@ class Color(QWidget):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
+    stylesheet = None
+    styles_path = "resources/styles.qss"
+    with open(styles_path, "r") as f:
+        stylesheet = f.read()
+    app.setStyleSheet(stylesheet)
     window = MainWindow()
     window.show()
 

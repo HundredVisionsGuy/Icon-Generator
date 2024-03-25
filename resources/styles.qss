@@ -1,0 +1,18 @@
+QLineEdit, QPushButton {
+  background-color: #FF66C4;
+  border-radius: 3px;
+  padding: .5em 1em;
+  color: #ffffff;
+  font-size: 1.3em;
+  font-weight: bold;
+}
+QLabel {
+  text-align: center;
+}
+QPushButton {
+  background-color: #0FA5FF;
+}
+QVBoxLayout:hover {
+  box-shadow: 0 0 5px #ffffff;
+  padding: 1em;
+}
