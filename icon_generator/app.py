@@ -1,5 +1,5 @@
 import sys
-from PyQt6.QtGui import QPalette, QColor
+from PyQt6.QtGui import QPalette, QColor, QFontDatabase, QFont
 from PyQt6.QtSvgWidgets import QSvgWidget
 from PyQt6.QtWidgets import (
     QApplication,
@@ -21,17 +21,21 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle("Widgets App")
         self.setContentsMargins(24, 24, 24, 24)  # NEW - adds margin
+        self.set_fonts()
 
         # Title
         title_label = QLabel("Avatar-inator")
+        title_label.setFont(QFont("Knewave", 24))
 
         # Main Avatar
         self.avatar_main_svg = QSvgWidget("resources/images/bottts_avatar.svg")
 
         # Let user choose a text seed
         self.seed_input = QLineEdit("")
+        self.seed_input.setFont(QFont("Montserrat"))
 
         self.get_avatar_button = QPushButton("Get Avatar")
+        self.get_avatar_button.setFont(QFont("Montserrat"))
 
         # Icon button widgets
         pixel_slot_layout = self.get_icon_layout("pixel_art")
@@ -63,6 +67,20 @@ class MainWindow(QMainWindow):
         widget.setLayout(layout)
         self.setCentralWidget(widget)
 
+    def set_fonts(self):
+        # import fonts
+        font_dir = "resources/fonts/"
+        title_font_name = "Knewave-Regular.ttf"
+        title_font_path = font_dir + "Knewave/" + title_font_name
+        regular_font_path = font_dir + "/Montserrat/"
+        regular_font_path += "Montserrat-VariableFont_wght.ttf"
+        success = QFontDatabase.addApplicationFont(title_font_path)
+        if success == -1:
+            print(f"{title_font_name} not loaded")
+        success = QFontDatabase.addApplicationFont(regular_font_path)
+        if success == -1:
+            print("Regular font not loaded.")
+
     def get_icon_layout(self, icon_type: str) -> QVBoxLayout:
         """return a vbox layout with an avatar and label.
 
@@ -79,6 +97,7 @@ class MainWindow(QMainWindow):
         avatar_svg.setFixedSize(64, 64)
         label = icon_type.replace("_", " ")
         avatar_label = QLabel(label)
+        avatar_label.setFont(QFont("Knewave", 12))
         icon_layout.addWidget(avatar_svg)
         icon_layout.addWidget(avatar_label)
         return icon_layout
