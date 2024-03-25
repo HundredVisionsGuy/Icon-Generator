@@ -22,8 +22,6 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Widgets App")
         self.setContentsMargins(24, 24, 24, 24)  # NEW - adds margin
 
-        layout = QGridLayout()
-
         # Title
         title_label = QLabel("Avatar-inator")
 
@@ -44,6 +42,8 @@ class MainWindow(QMainWindow):
         lorelei_slot_layout = self.get_icon_layout("lorelei")
         rings_slot_layout = self.get_icon_layout("rings")
         shapes_slot_layout = self.get_icon_layout("shapes")
+
+        layout = QGridLayout()
 
         # Add widgets to the layout
         layout.addWidget(title_label, 0, 0, 1, 4)
@@ -94,8 +94,9 @@ class Color(QWidget):
         self.setPalette(palette)
 
 
-app = QApplication(sys.argv)
-window = MainWindow()
-window.show()
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    window = MainWindow()
+    window.show()
 
-app.exec()
+    app.exec()
