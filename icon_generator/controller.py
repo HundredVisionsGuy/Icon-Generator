@@ -8,6 +8,7 @@ import requests as re
 from PyQt6.QtSvgWidgets import QSvgWidget
 from PyQt6.QtWidgets import (
     QLabel,
+    QSizePolicy,
     QVBoxLayout,
 )
 
@@ -34,8 +35,7 @@ def get_icon_layout(icon_type: str) -> QVBoxLayout:
     folder = "resources/images/"
     filepath = folder + icon_type + "_avatar.svg"
     avatar_svg = QSvgWidget(filepath)
-    avatar_svg.setMaximumSize(64, 64)
-
+    avatar_svg.setFixedSize(64, 64)
     label = icon_type.replace("_", " ")
     avatar_label = QLabel(label)
     icon_layout.addWidget(avatar_svg)
