@@ -28,7 +28,7 @@ class MainWindow(QMainWindow):
         title_label = QLabel("Avatar-inator")
 
         # Main Avatar
-        self.avatar_main_svg = QSvgWidget("resources/images/botts_avatar.svg")
+        self.avatar_main_svg = QSvgWidget("resources/images/bottts_avatar.svg")
 
         # Let user choose a text seed
         self.seed_input = QLineEdit("")
@@ -36,8 +36,14 @@ class MainWindow(QMainWindow):
         self.get_avatar_button = QPushButton("Get Avatar")
 
         # Icon button widgets
-        pixel_slot_layout = controller.get_icon_layout("lorelei")
-        adventurer_slot_layout = controller.get_icon_layout("identicon")
+        pixel_slot_layout = controller.get_icon_layout("pixel_art")
+        adventurer_slot_layout = controller.get_icon_layout("adventurer")
+        botts_slot_layout = controller.get_icon_layout("bottts")
+        croodles_slot_layout = controller.get_icon_layout("croodles")
+        identicon_slot_layout = controller.get_icon_layout("identicon")
+        lorelei_slot_layout = controller.get_icon_layout("lorelei")
+        rings_slot_layout = controller.get_icon_layout("rings")
+        shapes_slot_layout = controller.get_icon_layout("shapes")
 
         # Add widgets to the layout
         layout.addWidget(title_label, 0, 0, 1, 4)
@@ -46,6 +52,12 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.get_avatar_button, 3, 3, 1, 1)
         layout.addLayout(pixel_slot_layout, 4, 0, 1, 1)
         layout.addLayout(adventurer_slot_layout, 4, 1, 1, 1)
+        layout.addLayout(botts_slot_layout, 4, 2, 1, 1)
+        layout.addLayout(croodles_slot_layout, 4, 3, 1, 1)
+        layout.addLayout(identicon_slot_layout, 5, 0)
+        layout.addLayout(lorelei_slot_layout, 5, 1)
+        layout.addLayout(rings_slot_layout, 5, 2)
+        layout.addLayout(shapes_slot_layout, 5, 3)
 
         widget = QWidget()
         widget.setLayout(layout)

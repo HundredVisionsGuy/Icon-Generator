@@ -8,7 +8,6 @@ import requests as re
 from PyQt6.QtSvgWidgets import QSvgWidget
 from PyQt6.QtWidgets import (
     QLabel,
-    QSizePolicy,
     QVBoxLayout,
 )
 
