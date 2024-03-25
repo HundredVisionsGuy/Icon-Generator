@@ -1,5 +1,6 @@
 import sys
-from PyQt6.QtGui import QPalette, QColor
+import controller
+from PyQt6.QtGui import QPalette, QColor, QFontDatabase, QFont
 from PyQt6.QtSvgWidgets import QSvgWidget
 from PyQt6.QtWidgets import (
     QApplication,
@@ -22,10 +23,23 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Widgets App")
         self.setContentsMargins(24, 24, 24, 24)  # NEW - adds margin
 
+        # import fonts
+        font_dir = "resources/fonts/"
+        title_font_name = "Knewave-Regular.ttf"
+        title_font_path = font_dir + "Knewave/" + title_font_name
+        regular_font_path = font_dir + "/Montserrat/"
+        regular_font_path += "Montserrat-VariableFont_wght.ttf"
+        success = QFontDatabase.addApplicationFont(title_font_path)
+        if success == -1:
+            print(f"{title_font_name} not loaded")
+        success = QFontDatabase.addApplicationFont(regular_font_path)
+        if success == -1:
+            print("Regular font not loaded.")
         layout = QGridLayout()
 
         # Title
         title_label = QLabel("Avatar-inator")
+        title_label.setFont(QFont("Knewave"))
 
         # Main Avatar
         self.avatar_main_svg = QSvgWidget("resources/images/bottts_avatar.svg")
