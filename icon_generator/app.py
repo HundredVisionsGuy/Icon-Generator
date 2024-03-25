@@ -1,3 +1,4 @@
+import file_clerk.clerk as clerk
 import sys
 from PyQt6.QtGui import QPalette, QColor, QFontDatabase, QFont
 from PyQt6.QtSvgWidgets import QSvgWidget
@@ -11,6 +12,7 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
+from PyQt6.QtWebEngineWidgets import QWebEngineView
 
 
 # Subclass QMainWindow to customize your application's main window
@@ -28,7 +30,12 @@ class MainWindow(QMainWindow):
         title_label.setFont(QFont("Knewave", 24))
 
         # Main Avatar
-        self.avatar_main_svg = QSvgWidget("resources/images/bottts_avatar.svg")
+        self.avatar_main_display = QWebEngineView()
+        self.avatar_main_display.setFixedSize(240, 240)
+        self.avatar_main_display.setContentsMargins(5, 5, 5, 5)
+        self.avatar_main_svg = "resources/images/bottts_avatar.svg"
+        avatar_svg = clerk.file_to_string(self.avatar_main_svg)
+        self.avatar_main_display.setHtml(avatar_svg)
 
         # Let user choose a text seed
         self.seed_input = QLineEdit("")
@@ -51,7 +58,7 @@ class MainWindow(QMainWindow):
 
         # Add widgets to the layout
         layout.addWidget(title_label, 0, 0, 1, 4)
-        layout.addWidget(self.avatar_main_svg, 1, 1, 2, 2)
+        layout.addWidget(self.avatar_main_display, 1, 1, 2, 2)
         layout.addWidget(self.seed_input, 3, 0, 1, 3)
         layout.addWidget(self.get_avatar_button, 3, 3, 1, 1)
         layout.addLayout(pixel_slot_layout, 4, 0, 1, 1)

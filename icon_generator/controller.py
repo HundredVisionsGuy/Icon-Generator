@@ -16,6 +16,7 @@ seed = "?seed=HundredVisionsGuy"
 url = base_url + style + filetype + seed
 response = re.get(url)
 
+
 if __name__ == '__main__':
     response = re.get(url)
     if response.ok:

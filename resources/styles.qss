@@ -8,11 +8,13 @@ QLineEdit, QPushButton {
 }
 QLabel {
   text-align: center;
+  padding: 0.5em;
 }
 QPushButton {
   background-color: #0FA5FF;
 }
-QVBoxLayout:hover {
-  box-shadow: 0 0 5px #ffffff;
+QSvgWidget {
+  background-color: #336699;
   padding: 1em;
+  border-radius: 100%;
 }
