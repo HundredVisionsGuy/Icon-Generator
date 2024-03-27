@@ -1,10 +1,14 @@
+QWidget {
+  background-color: #ffffff;
+}
+
 QLineEdit, QPushButton {
-  background-color: #FF66C4;
+  background: #FF66C4;
   border-radius: 3px;
   padding: .5em 1em;
   color: #ffffff;
   font-size: 1.3em;
-  font-weight: bold;
+  font-weight: 800;
 }
 QLabel {
   text-align: center;
@@ -12,9 +16,4 @@ QLabel {
 }
 QPushButton {
   background-color: #0FA5FF;
-}
-QSvgWidget {
-  background-color: #336699;
-  padding: 1em;
-  border-radius: 100%;
 }

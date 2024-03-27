@@ -1,14 +1,17 @@
 import file_clerk.clerk as clerk
 import sys
-from PyQt6.QtGui import QPalette, QColor, QFontDatabase, QFont
+from PyQt6.QtCore import QEvent, Qt
+from PyQt6.QtGui import QEnterEvent, QPalette, QColor, QFontDatabase, QFont
 from PyQt6.QtSvgWidgets import QSvgWidget
 from PyQt6.QtWidgets import (
     QApplication,
+    QGraphicsScene,
+    QGraphicsView,
+    QGridLayout,
     QLabel,
     QLineEdit,
     QMainWindow,
     QPushButton,
-    QGridLayout,
     QVBoxLayout,
     QWidget,
 )
@@ -26,7 +29,8 @@ class MainWindow(QMainWindow):
         self.set_fonts()
 
         # Title
-        title_label = QLabel("Avatar-inator")
+        title_label = QLabel("Avatar-inator",
+                             alignment=Qt.AlignmentFlag.AlignHCenter)
         title_label.setFont(QFont("Knewave", 24))
 
         # Main Avatar
@@ -39,20 +43,21 @@ class MainWindow(QMainWindow):
 
         # Let user choose a text seed
         self.seed_input = QLineEdit("")
-        self.seed_input.setFont(QFont("Montserrat"))
+        self.seed_input.setFont(QFont("Montserrat", 12, 1))
+        self.seed_input.setPlaceholderText("Add text to customize")
 
         self.get_avatar_button = QPushButton("Get Avatar")
         self.get_avatar_button.setFont(QFont("Montserrat"))
 
         # Icon button widgets
-        pixel_slot_layout = self.get_icon_layout("pixel_art")
-        adventurer_slot_layout = self.get_icon_layout("adventurer")
-        botts_slot_layout = self.get_icon_layout("bottts")
-        croodles_slot_layout = self.get_icon_layout("croodles")
-        identicon_slot_layout = self.get_icon_layout("identicon")
-        lorelei_slot_layout = self.get_icon_layout("lorelei")
-        rings_slot_layout = self.get_icon_layout("rings")
-        shapes_slot_layout = self.get_icon_layout("shapes")
+        pixel_slot_layout = IconWidget("pixel_art")
+        adventurer_slot_layout = IconWidget("adventurer")
+        botts_slot_layout = IconWidget("bottts")
+        croodles_slot_layout = IconWidget("croodles")
+        identicon_slot_layout = IconWidget("identicon")
+        lorelei_slot_layout = IconWidget("lorelei")
+        rings_slot_layout = IconWidget("rings")
+        shapes_slot_layout = IconWidget("shapes")
 
         layout = QGridLayout()
 
@@ -61,14 +66,14 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.avatar_main_display, 1, 1, 2, 2)
         layout.addWidget(self.seed_input, 3, 0, 1, 3)
         layout.addWidget(self.get_avatar_button, 3, 3, 1, 1)
-        layout.addLayout(pixel_slot_layout, 4, 0, 1, 1)
-        layout.addLayout(adventurer_slot_layout, 4, 1, 1, 1)
-        layout.addLayout(botts_slot_layout, 4, 2, 1, 1)
-        layout.addLayout(croodles_slot_layout, 4, 3, 1, 1)
-        layout.addLayout(identicon_slot_layout, 5, 0)
-        layout.addLayout(lorelei_slot_layout, 5, 1)
-        layout.addLayout(rings_slot_layout, 5, 2)
-        layout.addLayout(shapes_slot_layout, 5, 3)
+        layout.addWidget(pixel_slot_layout, 4, 0, 1, 1)
+        layout.addWidget(adventurer_slot_layout, 4, 1, 1, 1)
+        layout.addWidget(botts_slot_layout, 4, 2, 1, 1)
+        layout.addWidget(croodles_slot_layout, 4, 3, 1, 1)
+        layout.addWidget(identicon_slot_layout, 5, 0)
+        layout.addWidget(lorelei_slot_layout, 5, 1)
+        layout.addWidget(rings_slot_layout, 5, 2)
+        layout.addWidget(shapes_slot_layout, 5, 3)
 
         widget = QWidget()
         widget.setLayout(layout)
@@ -103,9 +108,10 @@ class MainWindow(QMainWindow):
         avatar_svg = QSvgWidget(filepath)
         avatar_svg.setFixedSize(64, 64)
         label = icon_type.replace("_", " ")
-        avatar_label = QLabel(label)
+        avatar_label = QLabel(label, alignment=Qt.AlignmentFlag.AlignHCenter)
         avatar_label.setFont(QFont("Knewave", 12))
-        icon_layout.addWidget(avatar_svg)
+        icon_layout.addWidget(avatar_svg,
+                              alignment=Qt.AlignmentFlag.AlignHCenter)
         icon_layout.addWidget(avatar_label)
         return icon_layout
 
@@ -120,6 +126,44 @@ class Color(QWidget):
         self.setPalette(palette)
 
 
+class IconWidget(QWidget):
+    def __init__(self, icon_type: str):
+        super().__init__()
+        self.scene = QGraphicsScene()
+        self.setMouseTracking(True)
+
+        folder = "resources/images/"
+        filepath = folder + icon_type + "_avatar.svg"
+
+        avatar_svg = QSvgWidget(filepath)
+        avatar_svg.setFixedSize(60, 60)
+
+        # Set Button
+        title = icon_type.replace("_", " ")
+        label_text = self.scene.addText(title,
+                                        QFont("Knewave", 12))
+        label_text.setPos(10, 64)
+
+        avatar_widget = self.scene.addWidget(avatar_svg)
+        avatar_widget.setPos(14, 6)
+        view = QGraphicsView(self.scene)
+        vbox = QVBoxLayout()
+        vbox.addWidget(view)
+        self.setLayout(vbox)
+        self.setStyleSheet("border: 0 solid;")
+        self.setFixedSize(110, 120)
+
+    def enterEvent(self, event: QEnterEvent) -> None:
+        self.setStyleSheet(
+            "background-color: #fff; border: 1px solid #336699;"
+            )
+        return super().enterEvent(event)
+
+    def leaveEvent(self, a0: QEvent) -> None:
+        self.setStyleSheet("border: none;")
+        return super().leaveEvent(a0)
+
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     stylesheet = None
@@ -127,6 +171,7 @@ if __name__ == '__main__':
     with open(styles_path, "r") as f:
         stylesheet = f.read()
     app.setStyleSheet(stylesheet)
+    app.setStyle("Fusion")
     window = MainWindow()
     window.show()
 
