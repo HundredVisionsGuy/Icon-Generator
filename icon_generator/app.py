@@ -7,6 +7,7 @@ from PyQt6.QtGui import (QEnterEvent, QMouseEvent, QPalette, QColor,
 from PyQt6.QtSvgWidgets import QSvgWidget
 from PyQt6.QtWidgets import (
     QApplication,
+    QFileDialog,
     QGraphicsScene,
     QGraphicsView,
     QGridLayout,
@@ -55,6 +56,10 @@ class MainWindow(QMainWindow):
         self.clear_button.setFont(QFont("Montserrat"))
         self.clear_button.clicked.connect(self.clear_input)
 
+        self.save_button = QPushButton("Save avatar")
+        self.save_button.setFont(QFont("Montserrat"))
+        self.save_button.clicked.connect(self.save_avatar)
+
         # Icon button widgets
         pixel_slot_layout = IconWidget("pixel-art")
         adventurer_slot_layout = IconWidget("adventurer")
@@ -70,17 +75,18 @@ class MainWindow(QMainWindow):
         # Add widgets to the layout
         layout.addWidget(title_label, 0, 0, 1, 4)
         layout.addWidget(self.avatar_main_display, 1, 1, 2, 2)
-        layout.addWidget(self.seed_input, 3, 0, 1, 2)
-        layout.addWidget(self.get_avatar_button, 3, 2, 1, 1)
+        layout.addWidget(self.seed_input, 3, 0, 1, 3)
         layout.addWidget(self.clear_button, 3, 3, 1, 1)
-        layout.addWidget(pixel_slot_layout, 4, 0, 1, 1)
-        layout.addWidget(adventurer_slot_layout, 4, 1, 1, 1)
-        layout.addWidget(botts_slot_layout, 4, 2, 1, 1)
-        layout.addWidget(croodles_slot_layout, 4, 3, 1, 1)
-        layout.addWidget(identicon_slot_layout, 5, 0)
-        layout.addWidget(lorelei_slot_layout, 5, 1)
-        layout.addWidget(rings_slot_layout, 5, 2)
-        layout.addWidget(shapes_slot_layout, 5, 3)
+        layout.addWidget(self.get_avatar_button, 4, 0, 1, 2)
+        layout.addWidget(self.save_button, 4, 2, 1, 2)
+        layout.addWidget(pixel_slot_layout, 5, 0)
+        layout.addWidget(adventurer_slot_layout, 5, 1)
+        layout.addWidget(botts_slot_layout, 5, 2)
+        layout.addWidget(croodles_slot_layout, 5, 3)
+        layout.addWidget(identicon_slot_layout,6, 0)
+        layout.addWidget(lorelei_slot_layout, 6, 1)
+        layout.addWidget(rings_slot_layout, 6, 2)
+        layout.addWidget(shapes_slot_layout, 6, 3)
 
         items = (layout.itemAt(i) for i in range(layout.count()))
         for w in items:
@@ -114,11 +120,19 @@ class MainWindow(QMainWindow):
         avatar_type = self.avatar_type
 
         # make dicebear call
-        avatar_svg = controller.get_avatar(avatar_type, seed)
+        self.avatar_main_svg = controller.get_avatar(avatar_type, seed)
 
         # Change main avatar (if no error)
-        if "Error" not in avatar_svg:
-            self.avatar_main_display.setHtml(avatar_svg)
+        if "Error" not in self.avatar_main_svg:
+            self.avatar_main_display.setHtml(self.avatar_main_svg)
+
+    def save_avatar(self):
+        name = QFileDialog.getSaveFileName(self, 'Save File', 'myAvatar',
+                                           'SVG File (*.svg)')
+        file = open(name[0], 'w', encoding='utf-8')
+        code = self.avatar_main_svg
+        file.write(code)
+        file.close()
 
     def set_fonts(self):
         # import fonts
