@@ -34,6 +34,20 @@ def get_avatar(style: str, seed: str) -> str:
     return svg
 
 
+def get_avatar_type(avatar_path: str) -> str:
+    """returns the avatar type from the avatar_path
+    Args:
+        avatar_path: the relative path to the avatar in question.
+
+    Returns:
+        avatar_type: the type of avatar.
+    """
+    avatar_type = ""
+    filename = avatar_path.split("/")[-1]
+    avatar_type = filename.split("_")[0]
+    return avatar_type
+
+
 if __name__ == '__main__':
     result = get_avatar("bottts", "stuffy stuff")
     print(result)
