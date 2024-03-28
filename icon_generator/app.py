@@ -1,7 +1,8 @@
 import file_clerk.clerk as clerk
 import sys
-from PyQt6.QtCore import QEvent, Qt
-from PyQt6.QtGui import QEnterEvent, QPalette, QColor, QFontDatabase, QFont
+from PyQt6.QtCore import QEvent, Qt, pyqtSignal
+from PyQt6.QtGui import (QEnterEvent, QMouseEvent, QPalette, QColor,
+                         QFontDatabase, QFont)
 from PyQt6.QtSvgWidgets import QSvgWidget
 from PyQt6.QtWidgets import (
     QApplication,
@@ -75,9 +76,21 @@ class MainWindow(QMainWindow):
         layout.addWidget(rings_slot_layout, 5, 2)
         layout.addWidget(shapes_slot_layout, 5, 3)
 
+        items = (layout.itemAt(i) for i in range(layout.count()))
+        for w in items:
+            data = w.widget()
+            if isinstance(data, IconWidget):
+                data.selected.connect(self.change_main_svg)
         widget = QWidget()
         widget.setLayout(layout)
         self.setCentralWidget(widget)
+
+    def change_main_svg(self, path):
+        avatar_svg = clerk.file_to_string(path)
+        self.avatar_main_display.setHtml(avatar_svg)
+
+    def icon_clicked(self):
+        print("msg")
 
     def set_fonts(self):
         # import fonts
@@ -127,15 +140,17 @@ class Color(QWidget):
 
 
 class IconWidget(QWidget):
+    selected = pyqtSignal(str)
+
     def __init__(self, icon_type: str):
         super().__init__()
         self.scene = QGraphicsScene()
         self.setMouseTracking(True)
 
         folder = "resources/images/"
-        filepath = folder + icon_type + "_avatar.svg"
+        self.filepath = folder + icon_type + "_avatar.svg"
 
-        avatar_svg = QSvgWidget(filepath)
+        avatar_svg = QSvgWidget(self.filepath)
         avatar_svg.setFixedSize(60, 60)
 
         # Set Button
@@ -152,6 +167,10 @@ class IconWidget(QWidget):
         self.setLayout(vbox)
         self.setStyleSheet("border: 0 solid;")
         self.setFixedSize(110, 120)
+
+    def mousePressEvent(self, a0: QMouseEvent) -> None:
+        self.selected.emit(self.filepath)
+        return super().mousePressEvent(a0)
 
     def enterEvent(self, event: QEnterEvent) -> None:
         self.setStyleSheet(
