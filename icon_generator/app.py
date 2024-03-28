@@ -118,9 +118,6 @@ class MainWindow(QMainWindow):
         if "Error" not in avatar_svg:
             self.avatar_main_display.setHtml(avatar_svg)
 
-    def icon_clicked(self):
-        print("msg")
-
     def set_fonts(self):
         # import fonts
         font_dir = "resources/fonts/"
@@ -134,28 +131,6 @@ class MainWindow(QMainWindow):
         success = QFontDatabase.addApplicationFont(regular_font_path)
         if success == -1:
             print("Regular font not loaded.")
-
-    def get_icon_layout(self, icon_type: str) -> QVBoxLayout:
-        """return a vbox layout with an avatar and label.
-
-        Arguments:
-            icon_type: the type of icon we will display.
-
-        Returns:
-            icon_layout: a vbox layout with an avatar and label.
-        """
-        icon_layout = QVBoxLayout()
-        folder = "resources/images/"
-        filepath = folder + icon_type + "_avatar.svg"
-        avatar_svg = QSvgWidget(filepath)
-        avatar_svg.setFixedSize(64, 64)
-        label = icon_type.replace("_", " ")
-        avatar_label = QLabel(label, alignment=Qt.AlignmentFlag.AlignHCenter)
-        avatar_label.setFont(QFont("Knewave", 12))
-        icon_layout.addWidget(avatar_svg,
-                              alignment=Qt.AlignmentFlag.AlignHCenter)
-        icon_layout.addWidget(avatar_label)
-        return icon_layout
 
 
 class Color(QWidget):
