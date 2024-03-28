@@ -1,3 +1,4 @@
+import controller
 import file_clerk.clerk as clerk
 import sys
 from PyQt6.QtCore import QEvent, Qt, pyqtSignal
@@ -26,7 +27,7 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__()
 
         self.setWindowTitle("Widgets App")
-        self.setContentsMargins(24, 24, 24, 24)  # NEW - adds margin
+        self.setContentsMargins(12, 12, 12, 12)  # NEW - adds margin
         self.set_fonts()
 
         # Title
@@ -35,12 +36,11 @@ class MainWindow(QMainWindow):
         title_label.setFont(QFont("Knewave", 24))
 
         # Main Avatar
+        self.avatar_type = "bottts"
         self.avatar_main_display = QWebEngineView()
         self.avatar_main_display.setFixedSize(240, 240)
         self.avatar_main_display.setContentsMargins(5, 5, 5, 5)
-        self.avatar_main_svg = "resources/images/bottts_avatar.svg"
-        avatar_svg = clerk.file_to_string(self.avatar_main_svg)
-        self.avatar_main_display.setHtml(avatar_svg)
+        self.set_default_avatar()
 
         # Let user choose a text seed
         self.seed_input = QLineEdit("")
@@ -49,9 +49,14 @@ class MainWindow(QMainWindow):
 
         self.get_avatar_button = QPushButton("Get Avatar")
         self.get_avatar_button.setFont(QFont("Montserrat"))
+        self.get_avatar_button.clicked.connect(self.get_avatar)
+
+        self.clear_button = QPushButton("Clear text")
+        self.clear_button.setFont(QFont("Montserrat"))
+        self.clear_button.clicked.connect(self.clear_input)
 
         # Icon button widgets
-        pixel_slot_layout = IconWidget("pixel_art")
+        pixel_slot_layout = IconWidget("pixel-art")
         adventurer_slot_layout = IconWidget("adventurer")
         botts_slot_layout = IconWidget("bottts")
         croodles_slot_layout = IconWidget("croodles")
@@ -65,8 +70,9 @@ class MainWindow(QMainWindow):
         # Add widgets to the layout
         layout.addWidget(title_label, 0, 0, 1, 4)
         layout.addWidget(self.avatar_main_display, 1, 1, 2, 2)
-        layout.addWidget(self.seed_input, 3, 0, 1, 3)
-        layout.addWidget(self.get_avatar_button, 3, 3, 1, 1)
+        layout.addWidget(self.seed_input, 3, 0, 1, 2)
+        layout.addWidget(self.get_avatar_button, 3, 2, 1, 1)
+        layout.addWidget(self.clear_button, 3, 3, 1, 1)
         layout.addWidget(pixel_slot_layout, 4, 0, 1, 1)
         layout.addWidget(adventurer_slot_layout, 4, 1, 1, 1)
         layout.addWidget(botts_slot_layout, 4, 2, 1, 1)
@@ -85,9 +91,32 @@ class MainWindow(QMainWindow):
         widget.setLayout(layout)
         self.setCentralWidget(widget)
 
-    def change_main_svg(self, path):
-        avatar_svg = clerk.file_to_string(path)
+    def set_default_avatar(self):
+        self.avatar_main_svg = "resources/images/bottts_avatar.svg"
+        avatar_svg = clerk.file_to_string(self.avatar_main_svg)
         self.avatar_main_display.setHtml(avatar_svg)
+
+    def change_main_svg(self, path):
+        self.avatar_type = controller.get_avatar_type(path)
+        self.get_avatar()
+
+    def clear_input(self):
+        self.seed_input.setText("")
+        self.set_default_avatar()
+
+    def get_avatar(self):
+        # get text from input
+        seed = self.seed_input.text()
+
+        # get avatar_type
+        avatar_type = self.avatar_type
+
+        # make dicebear call
+        avatar_svg = controller.get_avatar(avatar_type, seed)
+
+        # Change main avatar (if no error)
+        if "Error" not in avatar_svg:
+            self.avatar_main_display.setHtml(avatar_svg)
 
     def icon_clicked(self):
         print("msg")
