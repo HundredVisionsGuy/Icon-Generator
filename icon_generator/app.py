@@ -107,6 +107,8 @@ class MainWindow(QMainWindow):
     def get_avatar(self):
         # get text from input
         seed = self.seed_input.text()
+        if not seed:
+            seed = "HundredVisionsGuy"
 
         # get avatar_type
         avatar_type = self.avatar_type
