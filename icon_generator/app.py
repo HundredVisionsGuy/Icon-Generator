@@ -39,7 +39,7 @@ class MainWindow(QMainWindow):
         # Main Avatar
         self.avatar_type = "bottts"
         self.avatar_main_display = QWebEngineView()
-        self.avatar_main_display.setFixedSize(240, 240)
+        self.avatar_main_display.setFixedSize(240, 280)
         self.avatar_main_display.setContentsMargins(5, 5, 5, 5)
         self.set_default_avatar()
 
