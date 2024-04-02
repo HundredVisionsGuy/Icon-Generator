@@ -10,7 +10,7 @@ QLineEdit, QPushButton {
   font-size: 1.3em;
   font-weight: 800;
 }
-QLabel {
+QLabel, QIconWidget {
   text-align: center;
   padding: 0.5em;
   color: #111111;

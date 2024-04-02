@@ -210,7 +210,7 @@ if __name__ == '__main__':
     with open(styles_path, "r") as f:
         stylesheet = f.read()
     app.setStyleSheet(stylesheet)
-    app.setStyle("Fusion")
+    app.setStyle("Breeze")
     window = MainWindow()
     window.show()
 
