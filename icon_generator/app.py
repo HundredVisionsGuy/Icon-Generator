@@ -81,7 +81,8 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(widget)
 
     def change_main_display(self, path: str) -> None:
-        
+        print()
+
     def set_default_avatar(self):
         avatar_svg = ""
         styles_path = "resources/images/main_avatar.svg"

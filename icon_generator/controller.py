@@ -11,6 +11,7 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
 )
 
+# build out the URL based on API docs
 base_url = "https://api.dicebear.com/7.x/"
 style = "bottts/"
 filetype = "svg"
