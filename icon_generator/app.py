@@ -1,7 +1,8 @@
+import controller
 import sys
-from PyQt6.QtCore import Qt, pyqtSignal
+from PyQt6.QtCore import Qt
 from PyQt6.QtSvgWidgets import QSvgWidget
-from PyQt6.QtGui import QFont, QFontDatabase, QMouseEvent
+from PyQt6.QtGui import QFont, QFontDatabase
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 from PyQt6.QtWidgets import (
     QApplication,
@@ -50,9 +51,8 @@ class MainWindow(QMainWindow):
 
         # Icon button widgets
         self.pixel_slot_layout = IconWidget("pixel_art")
-        self.pixel_slot_layout.selected.connect(self.change_main_display)
         self.lorelei_slot_layout = IconWidget("lorelei")
-        self.botts_slot_layout = IconWidget("botts")
+        self.botts_slot_layout = IconWidget("bottts")
         self.shapes_slot_layout = IconWidget("shapes")
         self.identicon_slot_layout = IconWidget("identicon")
         self.croodles_slot_layout = IconWidget("croodles")
@@ -80,14 +80,9 @@ class MainWindow(QMainWindow):
         # to take up all the space in the window by default.
         self.setCentralWidget(widget)
 
-    def change_main_display(self, path: str) -> None:
-        print()
-
     def set_default_avatar(self):
-        avatar_svg = ""
         styles_path = "resources/images/main_avatar.svg"
-        with open(styles_path, "r") as f:
-            avatar_svg = f.read()
+        avatar_svg = controller.get_file_contents(styles_path)
         self.avatar_main_display.setHtml(avatar_svg)
 
     def set_fonts(self):
@@ -109,12 +104,10 @@ class MainWindow(QMainWindow):
 
 
 class IconWidget(QWidget):
-    selected = pyqtSignal(str)
 
     def __init__(self, icon_type: str):
         super().__init__()
         self.scene = QGraphicsScene()
-        self.setMouseTracking(True)
 
         folder = "resources/images/"
         self.filepath = folder + icon_type + "_avatar.svg"
@@ -136,16 +129,10 @@ class IconWidget(QWidget):
         self.setLayout(vbox)
         self.setFixedSize(130, 140)
 
-    def mousePressEvent(self, a0: QMouseEvent) -> None:
-        self.selected.emit(self.filepath)
-        return super().mousePressEvent(a0)
-
 
 app = QApplication(sys.argv)
-stylesheet = None
 styles_path = "resources/styles.qss"
-with open(styles_path, "r") as f:
-    stylesheet = f.read()
+stylesheet = controller.get_file_contents(styles_path)
 app.setStyleSheet(stylesheet)
 window = MainWindow()
 window.show()

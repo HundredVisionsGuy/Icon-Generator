@@ -5,45 +5,53 @@ Python code to make API connections.
 """
 
 import requests as re
-from PyQt6.QtSvgWidgets import QSvgWidget
-from PyQt6.QtWidgets import (
-    QLabel,
-    QVBoxLayout,
-)
 
 # build out the URL based on API docs
 base_url = "https://api.dicebear.com/7.x/"
-style = "bottts/"
+default_style = "bottts"
 filetype = "svg"
-seed = "?seed=HundredVisionsGuy"
-
-url = base_url + style + filetype + seed
-response = re.get(url)
+default_seed = "HundredVisionsGuy"
 
 
-def get_icon_layout(icon_type: str) -> QVBoxLayout:
-    """return a vbox layout with an avatar and label.
+def call_api(style=default_style, seed=default_seed):
+    """make API call to Dicebear.
 
-    Arguments:
-        icon_type: the type of icon we will display.
+    The seed and style parameters are optional, so if the user doesn't provide
+    a style or seed, it will use the default values.
+
+    If the call is unsuccessful, it will return an error code
+    and an error message.
+
+    Args:
+        style: the style of avatar to get.
+        seed: a text seed to randomize the avatar.
 
     Returns:
-        icon_layout: a vbox layout with an avatar and label.
+        response: the text of the response or an error.
     """
-    icon_layout = QVBoxLayout()
-    folder = "resources/images/"
-    filepath = folder + icon_type + "_avatar.svg"
-    avatar_svg = QSvgWidget(filepath)
-    avatar_svg.setMaximumSize(64, 64)
-
-    label = icon_type.replace("_", " ")
-    avatar_label = QLabel(label)
-    icon_layout.addWidget(avatar_svg)
-    icon_layout.addWidget(avatar_label)
-    return icon_layout
+    url = f"{base_url}{style}/svg?seed={seed}"
+    response = re.get(url)
+    if response.ok:
+        return response.text
+    else:
+        return f"Error: {response.status_code} - {response.reason}"
 
 
-if response.ok:
-    print(response.text)
-else:
-    print(f"There was an error: {response.status_code}")
+def get_file_contents(path: str) -> str:
+    """returns the contents of a file.
+
+    Args:
+        path: path to file
+
+    Returns:
+        contents: file contents
+    """
+    contents = ""
+    with open(path, "r") as f:
+        contents = f.read()
+    return contents
+
+
+if __name__ == "__main__":
+    avatar_code = call_api("pixel-art", "phred")
+    print(avatar_code)
