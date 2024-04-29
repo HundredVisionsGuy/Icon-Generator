@@ -10,7 +10,7 @@ QLineEdit, QPushButton {
 }
 QLabel, IconWidget {
     text-align: center;
-    border-color: #ffffff;
+    background-color: #ffffff;
     padding: 4px;
     color: #111111;
 }

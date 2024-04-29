@@ -1,8 +1,8 @@
 import controller
 import sys
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QEvent, pyqtSignal
 from PyQt6.QtSvgWidgets import QSvgWidget
-from PyQt6.QtGui import QFont, QFontDatabase
+from PyQt6.QtGui import QEnterEvent, QFont, QFontDatabase, QMouseEvent
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 from PyQt6.QtWidgets import (
     QApplication,
@@ -56,7 +56,7 @@ class MainWindow(QMainWindow):
         self.shapes_slot_layout = IconWidget("shapes")
         self.identicon_slot_layout = IconWidget("identicon")
         self.croodles_slot_layout = IconWidget("croodles")
-        self.adventurer_slot_layout = IconWidget("identicon")
+        self.adventurer_slot_layout = IconWidget("adventurer")
         self.rings_slot_layout = IconWidget("rings")
 
         # Add widgets to the layout
@@ -73,12 +73,23 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.adventurer_slot_layout, 5, 2, 1, 1)
         layout.addWidget(self.rings_slot_layout, 5, 3, 1, 1)
 
+        # Add selected slots to IconWidget
+        items = (layout.itemAt(i) for i in range(layout.count()))
+        for w in items:
+            data = w.widget()
+            if isinstance(data, IconWidget):
+                data.selected.connect(self.change_main_svg)
         widget = QWidget()
         widget.setLayout(layout)
 
         # Set the central widget of the Window. Widget will expand
         # to take up all the space in the window by default.
         self.setCentralWidget(widget)
+
+    def change_main_svg(self, path: str) -> None:
+        code = controller.get_file_contents(path)
+        print(code)
+        self.avatar_main_display.setHtml(code)
 
     def set_default_avatar(self):
         styles_path = "resources/images/main_avatar.svg"
@@ -104,10 +115,12 @@ class MainWindow(QMainWindow):
 
 
 class IconWidget(QWidget):
+    selected = pyqtSignal(str)
 
     def __init__(self, icon_type: str):
         super().__init__()
         self.scene = QGraphicsScene()
+        self.setMouseTracking(True)
 
         folder = "resources/images/"
         self.filepath = folder + icon_type + "_avatar.svg"
@@ -128,6 +141,19 @@ class IconWidget(QWidget):
         vbox.addWidget(view)
         self.setLayout(vbox)
         self.setFixedSize(130, 140)
+        self.setStyleSheet("border: 2px solid #bbb;")
+
+    def enterEvent(self, event: QEnterEvent) -> None:
+        self.setStyleSheet("border: 4px solid #111;")
+        return super().enterEvent(event)
+
+    def leaveEvent(self, a0: QEvent) -> None:
+        self.setStyleSheet("border: 2px solid #bbb;")
+        return super().leaveEvent(a0)
+
+    def mousePressEvent(self, a0: QMouseEvent) -> None:
+        self.selected.emit(self.filepath)
+        return super().mouseReleaseEvent(a0)
 
 
 app = QApplication(sys.argv)

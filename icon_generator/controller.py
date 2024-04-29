@@ -47,11 +47,12 @@ def get_file_contents(path: str) -> str:
         contents: file contents
     """
     contents = ""
-    with open(path, "r") as f:
+    with open(path, "r", encoding='utf-8') as f:
         contents = f.read()
     return contents
 
 
 if __name__ == "__main__":
+    # test
     avatar_code = call_api("pixel-art", "phred")
     print(avatar_code)
