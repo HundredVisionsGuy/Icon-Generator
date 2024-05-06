@@ -35,6 +35,8 @@ class MainWindow(QMainWindow):
         title_label.setFont(QFont("Knewave", 24))
 
         # Main Avatar
+        self.avatar_type = "bottts"
+        self.main_avatar_path = "resources/images/main_avatar.svg"
         self.avatar_main_display = QWebEngineView()
         self.avatar_main_display.setFixedSize(240, 280)
         self.avatar_main_display.setContentsMargins(5, 5, 5, 5)
@@ -46,11 +48,16 @@ class MainWindow(QMainWindow):
         self.seed_input.setFont(QFont("Roboto", 12, 1))
         self.seed_input.setPlaceholderText("Add text to customize")
 
+        self.clear_button = QPushButton("Clear")
+        self.clear_button.setFont(QFont("Roboto", 12, 1))
+        self.clear_button.clicked.connect(self.clear_input)
         self.get_avatar_button = QPushButton("Get Avatar")
         self.get_avatar_button.setFont(QFont("Roboto", 12, 1))
+        self.save_avatar_button = QPushButton("Save Avatar")
+        self.save_avatar_button.setFont(QFont("Roboto", 12, 1))
 
         # Icon button widgets
-        self.pixel_slot_layout = IconWidget("pixel_art")
+        self.pixel_slot_layout = IconWidget("pixel-art")
         self.lorelei_slot_layout = IconWidget("lorelei")
         self.botts_slot_layout = IconWidget("bottts")
         self.shapes_slot_layout = IconWidget("shapes")
@@ -63,15 +70,17 @@ class MainWindow(QMainWindow):
         layout.addWidget(title_label, 0, 0, 1, 4)
         layout.addWidget(self.avatar_main_display, 1, 1, 2, 2)
         layout.addWidget(self.seed_input, 3, 0, 1, 3)
-        layout.addWidget(self.get_avatar_button, 3, 3, 1, 1)
-        layout.addWidget(self.pixel_slot_layout, 4, 0, 1, 1)
-        layout.addWidget(self.lorelei_slot_layout, 4, 1, 1, 1)
-        layout.addWidget(self.botts_slot_layout, 4, 2, 1, 1)
-        layout.addWidget(self.shapes_slot_layout, 4, 3, 1, 1)
-        layout.addWidget(self.identicon_slot_layout, 5, 0, 1, 1)
-        layout.addWidget(self.croodles_slot_layout, 5, 1, 1, 1)
-        layout.addWidget(self.adventurer_slot_layout, 5, 2, 1, 1)
-        layout.addWidget(self.rings_slot_layout, 5, 3, 1, 1)
+        layout.addWidget(self.clear_button, 3, 3, 1, 1)
+        layout.addWidget(self.get_avatar_button, 4, 0, 1, 2)
+        layout.addWidget(self.save_avatar_button, 4, 2, 1, 2)
+        layout.addWidget(self.pixel_slot_layout, 5, 0, 1, 1)
+        layout.addWidget(self.lorelei_slot_layout, 5, 1, 1, 1)
+        layout.addWidget(self.botts_slot_layout, 5, 2, 1, 1)
+        layout.addWidget(self.shapes_slot_layout, 5, 3, 1, 1)
+        layout.addWidget(self.identicon_slot_layout, 6, 0, 1, 1)
+        layout.addWidget(self.croodles_slot_layout, 6, 1, 1, 1)
+        layout.addWidget(self.adventurer_slot_layout, 6, 2, 1, 1)
+        layout.addWidget(self.rings_slot_layout, 6, 3, 1, 1)
 
         # Add selected slots to IconWidget
         items = (layout.itemAt(i) for i in range(layout.count()))
@@ -87,9 +96,25 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(widget)
 
     def change_main_svg(self, path: str) -> None:
-        code = controller.get_file_contents(path)
-        print(code)
-        self.avatar_main_display.setHtml(code)
+        self.avatar_type = controller.get_avatar_type(path)
+        self.get_avatar()
+
+    def clear_input(self):
+        self.seed_input.setText("")
+        self.set_default_avatar()
+
+    def get_avatar(self):
+        # get text from input
+        seed = self.seed_input.text()
+        if not seed:
+            seed = "Hundrevisionsguy"
+
+        # Make dicebear call
+        new_svg = controller.get_avatar(self.avatar_type, seed)
+
+        if "Error: " not in new_svg:
+            self.avatar_main_display.setHtml(new_svg)
+
 
     def set_default_avatar(self):
         styles_path = "resources/images/main_avatar.svg"
