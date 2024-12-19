@@ -8,10 +8,10 @@ packages = [{include = "icon_generator"}]
 
 [tool.poetry.dependencies]
 python = "^3.9"
-requests = "^2.31.0"
-pyqt6 = "^6.6.1"
-file-clerk = "^1.1.4"
-pyqt6-webengine = "^6.6.0"
+requests = "*"
+pyqt6 = "*"
+file-clerk = "*"
+pyqt6-webengine = "*"
 
 
 [build-system]

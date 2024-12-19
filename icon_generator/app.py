@@ -18,7 +18,7 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-from PyQt6.QtWebEngineWidgets import QWebEngineView
+from PyQt6 import QtWebEngineWidgets as QWebEngineView
 
 
 # Subclass QMainWindow to customize your application's main window
@@ -40,8 +40,8 @@ class MainWindow(QMainWindow):
 
         # Main Avatar
         self.avatar_type = "bottts"
-        self.avatar_main_display = QWebEngineView()
-        self.avatar_main_display.setFixedSize(240, 280)
+        self.avatar_main_display = QWebEngineView.QWebEngineView()
+        self.avatar_main_display.setFixedSize(240, 240)
         self.avatar_main_display.setContentsMargins(5, 5, 5, 5)
         self.set_default_avatar()
 
