@@ -35,6 +35,8 @@ class MainWindow(QMainWindow):
         title_label = QLabel("Avatar-inator",
                              alignment=Qt.AlignmentFlag.AlignHCenter)
         title_label.setFont(QFont("Knewave", 24))
+        title_styles = "color: green; background-color: #e0e0e0;"
+        title_label.setStyleSheet(title_styles)
 
         # Main Avatar
         self.avatar_type = "bottts"
@@ -71,6 +73,7 @@ class MainWindow(QMainWindow):
         shapes_slot_layout = IconWidget("shapes")
 
         layout = QGridLayout()
+        layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         # Add widgets to the layout
         layout.addWidget(title_label, 0, 0, 1, 4)
@@ -210,7 +213,6 @@ if __name__ == '__main__':
     with open(styles_path, "r") as f:
         stylesheet = f.read()
     app.setStyleSheet(stylesheet)
-    app.setStyle("Breeze")
     window = MainWindow()
     window.show()
 
