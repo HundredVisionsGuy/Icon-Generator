@@ -5,45 +5,49 @@ Python code to make API connections.
 """
 
 import requests as re
-from PyQt6.QtSvgWidgets import QSvgWidget
-from PyQt6.QtWidgets import (
-    QLabel,
-    QVBoxLayout,
-)
+
 
 # build out the URL based on API docs
 base_url = "https://api.dicebear.com/7.x/"
-style = "bottts/"
 filetype = "svg"
-seed = "?seed=HundredVisionsGuy"
-
-url = base_url + style + filetype + seed
-response = re.get(url)
 
 
-def get_icon_layout(icon_type: str) -> QVBoxLayout:
-    """return a vbox layout with an avatar and label.
+def get_avatar(style: str, seed: str) -> str:
+    """returns an svg from dicebear
 
-    Arguments:
-        icon_type: the type of icon we will display.
+    Args:
+        style: style of avatar.
+        seed: any text (name, word, phrase) will be used to customize
+            the avatar
 
     Returns:
-        icon_layout: a vbox layout with an avatar and label.
+        svg: the SVG code from dicebear API
     """
-    icon_layout = QVBoxLayout()
-    folder = "resources/images/"
-    filepath = folder + icon_type + "_avatar.svg"
-    avatar_svg = QSvgWidget(filepath)
-    avatar_svg.setMaximumSize(64, 64)
-
-    label = icon_type.replace("_", " ")
-    avatar_label = QLabel(label)
-    icon_layout.addWidget(avatar_svg)
-    icon_layout.addWidget(avatar_label)
-    return icon_layout
+    style = style + "/"
+    seed = "?seed=" + seed
+    url = base_url + style + filetype + seed
+    response = re.get(url)
+    if response.ok:
+        svg = response.text
+    else:
+        svg = f"Error: {response.status_code}"
+    return svg
 
 
-if response.ok:
-    print(response.text)
-else:
-    print(f"There was an error: {response.status_code}")
+def get_avatar_type(avatar_path: str) -> str:
+    """returns the avatar type from the avatar_path
+    Args:
+        avatar_path: the relative path to the avatar in question.
+
+    Returns:
+        avatar_type: the type of avatar.
+    """
+    avatar_type = ""
+    filename = avatar_path.split("/")[-1]
+    avatar_type = filename.split("_")[0]
+    return avatar_type
+
+
+if __name__ == '__main__':
+    result = get_avatar("bottts", "stuffy stuff")
+    print(result)
