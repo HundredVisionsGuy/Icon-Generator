@@ -51,8 +51,8 @@ Python code to make API connections.
 """
 
 import requests as re
-from PyQt6.QtSvgWidgets import QSvgWidget
-from PyQt6.QtWidgets import (
+from PySide6.QtSvgWidgets import QSvgWidget
+from PySide6.QtWidgets import (
     QLabel,
     QVBoxLayout,
 )

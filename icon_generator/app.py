@@ -1,11 +1,11 @@
 import controller
 import file_clerk.clerk as clerk
 import sys
-from PyQt6.QtCore import QEvent, Qt, pyqtSignal
-from PyQt6.QtGui import (QEnterEvent, QMouseEvent, QPalette, QColor,
+from PySide6.QtCore import QEvent, Qt, Signal
+from PySide6.QtGui import (QEnterEvent, QMouseEvent, QPalette, QColor,
                          QFontDatabase, QFont)
-from PyQt6.QtSvgWidgets import QSvgWidget
-from PyQt6.QtWidgets import (
+from PySide6.QtSvgWidgets import QSvgWidget
+from PySide6.QtWidgets import (
     QApplication,
     QFileDialog,
     QGraphicsScene,
@@ -18,7 +18,7 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-from PyQt6 import QtWebEngineWidgets as QWebEngineView
+from PySide6 import QtWebEngineWidgets as QWebEngineView
 
 
 # Subclass QMainWindow to customize your application's main window
@@ -163,7 +163,7 @@ class Color(QWidget):
 
 
 class IconWidget(QWidget):
-    selected = pyqtSignal(str)
+    selected = Signal(str)
 
     def __init__(self, icon_type: str):
         super().__init__()

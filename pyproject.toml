@@ -7,11 +7,10 @@ readme = "README.md"
 packages = [{include = "icon_generator"}]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = ">=3.9,<3.14"
 requests = "*"
-pyqt6 = "*"
+PySide6 = "*"
 file-clerk = "*"
-pyqt6-webengine = "*"
 
 
 [build-system]
